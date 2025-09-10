@@ -1,7 +1,7 @@
 import { useState } from "react";
 import CVContent from "./CVContent";
 import "../styles/style.css";
-import html2pdf from "html2pdf.js";
+import jsPDF from "jspdf";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBriefcase,
@@ -201,9 +201,39 @@ const CustomizeContent = () => {
 
   const saveCV = () => {
     const element = document.querySelector(".cv-container");
-    html2pdf().from(element).save("cv.pdf");
-  };
+    if (!element) return;
 
+    const cvContent = element.outerHTML;
+    const printWindow = window.open("", "_blank", "width=900,height=1200");
+    printWindow.document.write(`
+      <html>
+        <head>
+          <title>CV</title>
+          <link rel="stylesheet" href="/src/styles/style.css" />
+          <style>
+            @media print {
+              @page { margin: 0; }
+              body { margin: 0; }
+              .cv-container {
+                width: 800px !important;
+                margin: 0 auto !important;
+                box-shadow: none !important;
+                border-radius: 0 !important;
+                min-height: 0 !important;
+                height: auto !important;
+                background: #fff !important;
+              }
+            }
+            body { background: #fff; margin: 0; }
+          </style>
+        </head>
+        <body onload="window.print(); window.close();">
+          ${cvContent}
+        </body>
+      </html>
+    `);
+    printWindow.document.close();
+  };
   const handleAddNewEducation = () => {
     setCurrentEducation({
       school: "",

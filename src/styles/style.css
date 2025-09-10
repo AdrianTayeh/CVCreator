@@ -86,8 +86,7 @@ textarea {
 
 .cv-container {
     text-align: center;
-    min-height: 29.7cm;
-    height: 100%;
+    height: auto;
     width: 100%;
     background-color: white;
     border-radius: 10px;
